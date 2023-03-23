@@ -104,7 +104,7 @@ class GithubApp(Framework.TestCase):
         # At this point the GithubApp object is not complete.
         # The url should change when the object is completed - after pulling it down
         # from the github API
-        self.assertEqual(app.url, "/app")
+        self.assertEqual(app.url, "/apps/pygithubtest")
         self.assertEqual(app.created_at, datetime(2020, 8, 1, 17, 23, 46))
         self.assertEqual(app.description, "Sample App to test PyGithub")
         self.assertListEqual(

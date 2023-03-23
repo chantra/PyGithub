@@ -1,3 +1,4 @@
+from datetime import datetime
 import time  # NOQA
 
 import requests  # NOQA
@@ -140,6 +141,46 @@ class GithubIntegration(Framework.BasicTestCase):
         )
 
         self.assertEqual(installation.id, self.repo_installation_id)
+
+    def testGetApp(self):
+        github_integration = github.GithubIntegration(
+            app_id=APP_ID, private_key=PRIVATE_KEY
+        )
+        
+        app = github_integration.get_app()
+        # At this point the GithubApp object is not complete.
+        # The url should change when the object is completed - after pulling it down
+        # from the github API
+        self.assertEqual(app.url, "/apps/pygithubtest")
+        self.assertEqual(app.created_at, datetime(2020, 8, 1, 17, 23, 46))
+        self.assertEqual(app.description, "Sample App to test PyGithub")
+        self.assertListEqual(
+            app.events,
+            ["check_run", "check_suite", "label", "member", "public"],
+        )
+        self.assertEqual(app.external_url, "https://pygithub.readthedocs.io")
+        self.assertEqual(app.html_url, "https://github.com/apps/pygithubtest")
+        self.assertEqual(app.id, 75269)
+        self.assertEqual(app.name, "PyGithubTest")
+        self.assertEqual(app.owner.login, "wrecker")
+        self.assertDictEqual(
+            app.permissions,
+            {
+                "actions": "write",
+                "checks": "write",
+                "keys": "read",
+                "members": "read",
+                "metadata": "read",
+                "packages": "read",
+                "pages": "read",
+                "repository_hooks": "write",
+                "vulnerability_alerts": "read",
+                "workflows": "write",
+            },
+        )
+        self.assertEqual(app.slug, "pygithubtest")
+        self.assertEqual(app.updated_at, datetime(2020, 8, 1, 17, 44, 31))
+        self.assertEqual(app.url, "/apps/pygithubtest")
 
     def testGetAppInstallation(self):
         github_integration = github.GithubIntegration(

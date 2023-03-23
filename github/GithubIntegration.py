@@ -3,6 +3,7 @@ import deprecated
 from github import Consts
 from github.AppAuthentication import AppAuthentication
 from github.AppInstallationAuthentication import AppInstallationAuthentication
+from github.GithubApp import GithubApp
 from github.Installation import Installation
 from github.MainClass import Github
 from github.PaginatedList import PaginatedList
@@ -106,6 +107,10 @@ class GithubIntegration:
             jwt_expiry,
             jwt_issued_at,
         )._get_access_token_func(self.__requester)()
+
+    def get_app(self):
+        headers, data = self.__requester.requestJsonAndCheck("GET", "/app")
+        return GithubApp(self.__requester, headers, data, completed=True)
 
     def get_github_for_installation(
         self,
